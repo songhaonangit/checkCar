@@ -51,8 +51,9 @@ public class ConsoleActivity extends AppCompatActivity {
     private double a1=0.05;
     private  int w1= 0;
     private  int q1= 0;
-    private  int N = 20;
-    private  int K = 50;
+    private  final int N = 20;
+    private  final int K = 50;
+    private  final int repeat_times =10;
 
     //磁场强度的阈值
     private int threshold = 15;
@@ -214,15 +215,15 @@ public class ConsoleActivity extends AppCompatActivity {
 
     }
 
-@Override
-public boolean dispatchKeyEvent(KeyEvent event) {
-    if(event.getKeyCode() == KeyEvent.KEYCODE_BACK ) {
-        //do something.
-        return true;
-    }else {
-        return super.dispatchKeyEvent(event);
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if(event.getKeyCode() == KeyEvent.KEYCODE_BACK ) {
+            //do something.
+            return true;
+        }else {
+            return super.dispatchKeyEvent(event);
+        }
     }
-}
 
     public void sensorDataBase(String str){
         String[] res= null;
@@ -253,17 +254,9 @@ public boolean dispatchKeyEvent(KeyEvent event) {
 
           //  Log.d(TAG,"----X:"+x+"----Y:"+y+"----Z:"+z);
             double x2 = (Math.abs(x))^2;
-//            if(x<0){
-//                x2 = -x2;
-//            }
             double y2 = (Math.abs(y))^2;
-//            if(y<0){
-//                y2 = -y2;
-//            }
+
             double z2 = (Math.abs(y))^2;
-//            if(z<0){
-//                z2 = -z2;
-//            }
             double sum = x2+y2+z2;
             double s;
             if(sum<0){
@@ -382,17 +375,11 @@ public boolean dispatchKeyEvent(KeyEvent event) {
             }
 
             double x2 = (Math.abs(x))^2;
-//            if(x<0){
-//                x2 = -x2;
-//            }
+
             double y2 = (Math.abs(y))^2;
-//            if(y<0){
-//                y2 = -y2;
-//            }
+
             double z2 = (Math.abs(y))^2;
-//            if(z<0){
-//                z2 = -z2;
-//            }
+
             double sum = x2+y2+z2;
             double s;
             if(sum<0){
@@ -405,14 +392,11 @@ public boolean dispatchKeyEvent(KeyEvent event) {
 
 
 
-
             m[i%N]= s;
 
             if(i== N-1){
                 k0 = MathUtils.meanAverage(m);
-                // Log.d(TAG,"---sqrt(x^2+y^2+z^2):"+s+"---i---"+i);
             }
-
 
            /***
             * 基线值平滑处理
@@ -438,7 +422,6 @@ public boolean dispatchKeyEvent(KeyEvent event) {
             i++;
 
 
-
             Log.d(TAG,"---sMathUtils.variance k0:"+k0+"---s--"+s+"--k1--"+k1);
 
             if (i>K){
@@ -456,12 +439,12 @@ public boolean dispatchKeyEvent(KeyEvent event) {
                     q1=0;
                 }
                 Log.d(TAG,"---sMathUtils.variance w1:"+w1+"---q1--"+q1);
-                if(w1>10){
+                if(w1>repeat_times){
                     isCarIn = true;
 
                     carAnimate(isCarIn);
                 }
-                if(q1>5) {
+                if(q1>repeat_times) {
                     isCarIn = false;
                     carAnimate(isCarIn);
                 }

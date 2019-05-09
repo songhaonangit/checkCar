@@ -17,7 +17,7 @@
     <string name="send">发送</string>
     <string name="read">读取</string>
     <string name="toggle">切换</string>
-    <string name="startlistener">开始检测....</string>
+    <string name="startlistener">开始监听....</string>
     <string name="stringmode">检测模式</string>
     <string name="hexstringmode">HEX模式</string>
     <string name="inputhit">请输入字符</string>
