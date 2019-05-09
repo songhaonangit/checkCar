@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_weight="1"
+    android:baselineAligned="false">
+
+    <ListView
+        android:id="@+id/list_read"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="3dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="normal" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="14sp"
+        android:id="@+id/tv_timer"/>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:src="@drawable/p6" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/car_in"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:textColor="@android:color/holo_green_dark"
+        android:id="@+id/tv_in"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/car_out"
+        android:layout_gravity="center"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="18sp"
+        android:id="@+id/tv_out"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/now_threshold"
+        android:layout_gravity="center"
+        android:textColor="@android:color/holo_purple"
+        android:textSize="14sp"
+        android:id="@+id/tv_gas"/>
+</LinearLayout>
+
