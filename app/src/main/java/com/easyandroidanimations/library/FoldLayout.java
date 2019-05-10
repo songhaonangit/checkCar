@@ -31,21 +31,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * The folding layout where the number of folds, the anchor point and the
+ * The folding dialog_layout where the number of folds, the anchor point and the
  * orientation of the fold can be specified. Each of these parameters can
  * be modified individually and updates and resets the fold to a default
  * (unfolded) state. The fold factor varies between 0 (completely unfolded
  * flat image) to 1.0 (completely folded, non-visible image).
  *
- * This layout throws an exception if there is more than one child added to the view.
- * For more complicated view hierarchy's inside the folding layout, the views should all
- * be nested inside 1 parent layout.
+ * This dialog_layout throws an exception if there is more than one child added to the view.
+ * For more complicated view hierarchy's inside the folding dialog_layout, the views should all
+ * be nested inside 1 parent dialog_layout.
  *
- * This layout folds the contents of its child in real time. By applying matrix
+ * This dialog_layout folds the contents of its child in real time. By applying matrix
  * transformations when drawing to canvas, the contents of the child may change as
  * the fold takes place. It is important to note that there are jagged edges about
- * the perimeter of the layout as a result of applying transformations to a rectangle.
- * This can be avoided by having the child of this layout wrap its content inside a
+ * the perimeter of the dialog_layout as a result of applying transformations to a rectangle.
+ * This can be avoided by having the child of this dialog_layout wrap its content inside a
  * 1 pixel transparent border. This will cause an anti-aliasing like effect and smoothen
  * out the edges.
  *
@@ -144,7 +144,7 @@ public class FoldLayout extends ViewGroup {
 
     /**
      * The custom exception to be thrown so as to limit the number of views in this
-     * layout to at most one.
+     * dialog_layout to at most one.
      */
     private class NumberOfFoldingLayoutChildrenException extends RuntimeException {
         public NumberOfFoldingLayoutChildrenException(String message) {
@@ -152,7 +152,7 @@ public class FoldLayout extends ViewGroup {
         }
     }
 
-    /** Throws an exception if the number of views added to this layout exceeds one.*/
+    /** Throws an exception if the number of views added to this dialog_layout exceeds one.*/
     private void throwCustomException (int numOfChildViews) {
         if (numOfChildViews == 1) {
             throw new NumberOfFoldingLayoutChildrenException(FOLDING_VIEW_EXCEPTION_MESSAGE);
@@ -217,7 +217,7 @@ public class FoldLayout extends ViewGroup {
     /**
      * This method is called in order to update the fold's orientation, anchor
      * point and number of folds. This creates the necessary setup in order to
-     * prepare the layout for a fold with the specified parameters. Some of the
+     * prepare the dialog_layout for a fold with the specified parameters. Some of the
      * dimensions required for the folding transformation are also acquired here.
      *
      * After this method is called, it will be in a completely unfolded state by default.
@@ -271,7 +271,7 @@ public class FoldLayout extends ViewGroup {
         int delta = Math.round(mIsHorizontal ? ((float) w) / ((float) mNumberOfFolds) :
                 ((float) h) /((float) mNumberOfFolds));
 
-        /* Loops through the number of folds and segments the full layout into a number
+        /* Loops through the number of folds and segments the full dialog_layout into a number
          * of smaller equal components. If the number of folds is odd, then one of the
          * components will be smaller than all the rest. Note that deltap below handles
          * the calculation for an odd number of folds.*/

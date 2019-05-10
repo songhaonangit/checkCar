@@ -57,28 +57,6 @@ public class MainUseActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(R.string.init);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-            }
-        }
-
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
-
-        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        bluetoothAdapter = bluetoothManager.getAdapter();
-
-        // buletooth not supported!!!
-        if (bluetoothAdapter == null) {
-            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
 
 
         // Example of a call to a native method
@@ -109,9 +87,33 @@ public class MainUseActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
+
+
         //要注册才能开启使用
         registerReceiver(gattBroadcastReceiver,makeGattUpdateIntenFilter());
-        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+            }
+        }
+
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+
+        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothAdapter = bluetoothManager.getAdapter();
+
+        // buletooth not supported!!!
+        if (bluetoothAdapter == null) {
+            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         if (!bluetoothAdapter.isEnabled()) {
             final Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -275,9 +277,11 @@ public class MainUseActivity extends AppCompatActivity {
         Log.d(TAG, "Connect to device: " + BLE_DEVICE + " addr: " + BLE_ADDR);
 
 //        //startActivity();
-//        if(isConnected){
+//        if(isConnected ){
+//            if(handler!=null)
 //            handler.removeCallbacks(runnable);
 //        }else {
+//            if(handler!=null)
 //            handler.postDelayed(runnable, 3000);
 //        }
 
@@ -424,11 +428,12 @@ public class MainUseActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case RETRY:
-                    final Intent gattIntent = new Intent(MainUseActivity.this,BtService.class);
-                    gattIntent.putExtra(BtDeviceServicesActivity.EXTRAS_DEVICE_NAME, BLE_DEVICE);
-                    gattIntent.putExtra(BtDeviceServicesActivity.EXTRAS_DEVICE_ADDR, BLE_ADDR);
-                    bindService(gattIntent,serviceConnection,BIND_AUTO_CREATE);
-                    Log.d(TAG, "Connect to device: " + BLE_DEVICE + " addr: " + BLE_ADDR);
+//                    final Intent gattIntent = new Intent(MainUseActivity.this,BtService.class);
+//                    gattIntent.putExtra(BtDeviceServicesActivity.EXTRAS_DEVICE_NAME, BLE_DEVICE);
+//                    gattIntent.putExtra(BtDeviceServicesActivity.EXTRAS_DEVICE_ADDR, BLE_ADDR);
+//                    bindService(gattIntent,serviceConnection,BIND_AUTO_CREATE);
+//                    Log.d(TAG, "Connect to device: " + BLE_DEVICE + " addr: " + BLE_ADDR);
+                    onResume();
 
                     break;
                 default:
@@ -446,7 +451,7 @@ public class MainUseActivity extends AppCompatActivity {
             Message message = new Message();
             message.what = RETRY;
             handler.sendMessage(message);
-            handler.postDelayed(runnable, 1000*10);
+            handler.postDelayed(runnable, 1000*20);
 
         }
     };

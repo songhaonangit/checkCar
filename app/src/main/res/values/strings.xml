@@ -58,9 +58,16 @@
     <string name="github">GitHub</string>
 
     <string name="init">初始化扫描中...</string>
+    <string name="retry_info">如果页面长时间未跳转，请点击“重试”</string>
     <string name="car_in">有车</string>
     <string name="car_out">无车</string>
     <string name="data_verb">数据校准中,请不要停放车辆...</string>
     <string name="data_check">检测中</string>
     <string name="now_threshold">当前阈值为：</string>
+    <string name="set_threshold">设置阈值</string>
+    <string name="label_cancel">取消</string>
+    <string name="label_submit">提交</string>
+    <string name="label_report">设置阈值</string>
+    <string name="label_type_your_comment">请输入小于车辆停靠后APP显示数据（整数类型）</string>
+
 </resources>

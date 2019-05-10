@@ -1,5 +1,6 @@
 package bt.lcy.btread.use;
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.content.BroadcastReceiver;
@@ -11,10 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,8 +42,7 @@ public class ConsoleActivity extends AppCompatActivity {
 
     ImageView card;
     TextView tv_carin,tv_carout,tv_gas,tv_timer;
-    private MenuItem hexMenuItem;
-    private MenuItem stringMenuItem;
+    private MenuItem set_value;
     private static BluetoothGattCharacteristic characteristic;
     private static BtService btService;
     private boolean write = false;
@@ -55,9 +58,11 @@ public class ConsoleActivity extends AppCompatActivity {
     private  final int K = 50;
     private  final int repeat_times =10;
 
+    public static final String THRESHOLD_VALUE = "threshold";
     //磁场强度的阈值
-    private int threshold = 15;
+    private int threshold ;
     double[] m=new double[N];
+    AlertDialog dialogBuilder;
     private ReadDataAdapter readDataAdapter;
 
     private boolean onlyRead = false;
@@ -73,11 +78,36 @@ public class ConsoleActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
+        getMenuInflater().inflate(R.menu.set_value, menu);
+        set_value = menu.findItem(R.id.set_value);
+        set_value.setVisible(true);
         return true;
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        switch (item.getItemId()) {
+
+            case R.id.set_value: {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialogBuilder.show();
+
+                    }
+                });
+//                invalidateOptionsMenu();
+                return true;
+            }
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,10 +141,6 @@ public class ConsoleActivity extends AppCompatActivity {
                 sensorDataBase(text);
                 //sensorDataBasePlus(text);
 
-               // final byte[] arr = text.getBytes();
-
-
-
                 Log.i(TAG, "+++Get Notify data is " + text);
             } else if (BtService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Toast.makeText(ConsoleActivity.this, R.string.srv_disconnect, Toast.LENGTH_SHORT).show();
@@ -132,7 +158,7 @@ public class ConsoleActivity extends AppCompatActivity {
         tv_carin =findViewById(R.id.tv_in);
         tv_carout = findViewById(R.id.tv_out);
         tv_gas = findViewById(R.id.tv_gas);
-        tv_gas.setText(getString(R.string.now_threshold)+threshold);
+
         tv_timer =findViewById(R.id.tv_timer);
 
         final Intent intent = getIntent();
@@ -168,8 +194,35 @@ public class ConsoleActivity extends AppCompatActivity {
 
 
         }
+        dialogBuilder = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_layout, null);
 
+        final EditText editText = (EditText) dialogView.findViewById(R.id.edt_comment);
+        Button button1 = (Button) dialogView.findViewById(R.id.buttonSubmit);
+        Button button2 = (Button) dialogView.findViewById(R.id.buttonCancel);
 
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogBuilder.dismiss();
+            }
+        });
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!TextUtils.isEmpty(editText.getText().toString())){
+                    PreferencesUtils.putInt(ConsoleActivity.this,THRESHOLD_VALUE,Integer.valueOf(editText.getText().toString()));
+                    // DO SOMETHINGS
+                    dialogBuilder.dismiss();
+                }else {
+                    Toast.makeText(ConsoleActivity.this, R.string.label_type_your_comment, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        dialogBuilder.setView(dialogView);
+      threshold =  PreferencesUtils.getInt(ConsoleActivity.this,THRESHOLD_VALUE,10);
        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.stringmode);
         getSupportActionBar().setTitle(R.string.data_verb);
@@ -228,6 +281,8 @@ public class ConsoleActivity extends AppCompatActivity {
     public void sensorDataBase(String str){
         String[] res= null;
         //  Log.d(TAG,"----str:"+str);
+        threshold =  PreferencesUtils.getInt(ConsoleActivity.this,THRESHOLD_VALUE,10);
+        tv_gas.setText(getString(R.string.now_threshold)+threshold);
         if(!TextUtils.isEmpty(str)){
             // Log.d(TAG,"--TextUtils--str:"+str);
             if(str.contains(",")){
